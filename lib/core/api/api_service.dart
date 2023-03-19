@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/api_constants.dart';
 import 'package:justsanppit/core/api/dio_exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,12 +17,13 @@ class ApiService {
       final result = await dio.post(endPoint, data: data);
       return result.data;
     } on DioError catch (e) {
+      print(e.response!.statusCode);
       throw DioException.fromDioError(e);
     }
   }
 
 //* Post Data for adding assets,items and notes
-  postDataWithAuthorize({required String endPoint, required data}) async {
+  postDataWithAuthorize({required String endPoint, data}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final Dio dio = Dio(
       BaseOptions(baseUrl: ApiConstants.url, headers: {
@@ -55,3 +57,7 @@ class ApiService {
     }
   }
 }
+
+final apiServiceProvider = Provider<ApiService>((ref) {
+  return ApiService();
+});
