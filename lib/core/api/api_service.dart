@@ -17,7 +17,6 @@ class ApiService {
       final result = await dio.post(endPoint, data: data);
       return result.data;
     } on DioError catch (e) {
-      print(e.response!.statusCode);
       throw DioException.fromDioError(e);
     }
   }

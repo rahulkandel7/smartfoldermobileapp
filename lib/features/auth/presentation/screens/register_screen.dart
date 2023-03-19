@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
 import 'package:justsanppit/features/auth/presentation/controllers/auth_controller.dart';
 
-import '../../../../core/utils/formField.dart';
+import '../../../../core/utils/form_field.dart';
 import '../../../../core/utils/toast.dart';
 
 class RegisterScreen extends StatefulWidget {
