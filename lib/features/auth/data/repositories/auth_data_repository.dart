@@ -8,6 +8,10 @@ abstract class AuthDataRepository {
   Future<Either<ApiError, String>> login(data);
   Future<Either<ApiError, String>> register(data);
   Future<Either<ApiError, String>> logout();
+
+  Future<Either<ApiError, String>> sendPasswordResetLink(var data);
+  Future<Either<ApiError, String>> codeCheck(var data);
+  Future<Either<ApiError, String>> forgetChangePassword(var data);
 }
 
 final authDataRepositoryProvider = Provider<AuthDataRepository>((ref) {
@@ -42,6 +46,44 @@ class AuthDataRepositoryImpl extends AuthDataRepository {
   Future<Either<ApiError, String>> register(data) async {
     try {
       final result = await _authDataSources.register(data);
+      return right(result);
+    } on DioException catch (e) {
+      return left(ApiError(message: e.message!));
+    }
+  }
+
+  @override
+  Future<Either<ApiError, String>> sendPasswordResetLink(var data) async {
+    try {
+      final result = await _authDataSources.sendPasswordResetLink(data);
+      return right(result);
+    } on DioException catch (e) {
+      return Left(
+        ApiError(
+          message: e.message!,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ApiError, String>> codeCheck(data) async {
+    try {
+      final result = await _authDataSources.checkCode(data);
+      return right(result);
+    } on DioException catch (e) {
+      return Left(
+        ApiError(
+          message: e.message!,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<ApiError, String>> forgetChangePassword(data) async {
+    try {
+      final result = await _authDataSources.forgetChnagePassword(data);
       return right(result);
     } on DioException catch (e) {
       return left(ApiError(message: e.message!));

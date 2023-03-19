@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
+import 'package:justsanppit/features/auth/presentation/screens/forget_change_password.dart';
+import 'package:justsanppit/features/auth/presentation/screens/forget_otp.dart';
+import 'package:justsanppit/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:justsanppit/features/auth/presentation/screens/login_screen.dart';
 import 'package:justsanppit/features/auth/presentation/screens/register_screen.dart';
 
@@ -22,6 +25,11 @@ class MainApp extends StatelessWidget {
           errorColor: Colors.red,
         ),
         scaffoldBackgroundColor: Colors.grey.shade900,
+        textTheme: TextTheme(
+          bodyLarge: TextStyle(
+            color: Colors.grey.shade300,
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -72,6 +80,9 @@ class MainApp extends StatelessWidget {
       routes: {
         AppRoutes.login: (ctx) => const LoginScreen(),
         AppRoutes.register: (ctx) => const RegisterScreen(),
+        AppRoutes.forgetChangePassword: (ctx) => const ForgetChangePassword(),
+        AppRoutes.forgetPasswordScreen: (ctx) => const ForgetPasswordScreen(),
+        AppRoutes.otp: (ctx) => const ForgetOtp(),
       },
     );
   }
