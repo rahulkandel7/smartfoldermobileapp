@@ -55,6 +55,23 @@ class ApiService {
       throw DioException.fromDioError(e);
     }
   }
+
+  deleteDataWithAuthorize({required String endpoint}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Dio dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.url,
+        headers: {'Authorization': 'Bearer ${prefs.getString('token')}'},
+      ),
+    );
+
+    try {
+      final result = await dio.delete(endpoint);
+      return result.data;
+    } on DioError catch (e) {
+      throw DioException.fromDioError(e);
+    }
+  }
 }
 
 final apiServiceProvider = Provider<ApiService>((ref) {

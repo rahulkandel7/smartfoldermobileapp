@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 Padding formField({
+  String? initialValue,
   required String label,
   required IconData iconData,
   required Size size,
   bool isPassword = false,
   required Function(String?)? handleSave,
-  required FocusNode focusNode,
-  required Function()? handleEditing,
-  required String? Function(String?)? handleValidate,
+  FocusNode? focusNode,
+  Function()? handleEditing,
+  String? Function(String?)? handleValidate,
   required TextInputType textInputType,
   Function(String)? handleChange,
 }) {
@@ -16,6 +17,7 @@ Padding formField({
     padding: EdgeInsets.only(top: size.height * 0.03),
     child: TextFormField(
       focusNode: focusNode,
+      initialValue: initialValue,
       decoration: InputDecoration(
         label: Text(label),
         prefixIcon: Icon(

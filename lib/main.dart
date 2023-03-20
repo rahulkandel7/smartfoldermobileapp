@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
+import 'package:justsanppit/features/assets/presentation/screens/asset_screen.dart';
 import 'package:justsanppit/features/auth/presentation/screens/forget_change_password.dart';
 import 'package:justsanppit/features/auth/presentation/screens/forget_otp.dart';
 import 'package:justsanppit/features/auth/presentation/screens/forget_password_screen.dart';
@@ -83,6 +84,7 @@ class MainApp extends StatelessWidget {
         AppRoutes.forgetChangePassword: (ctx) => const ForgetChangePassword(),
         AppRoutes.forgetPasswordScreen: (ctx) => const ForgetPasswordScreen(),
         AppRoutes.otp: (ctx) => const ForgetOtp(),
+        AppRoutes.assetScreen: (ctx) => const AssetScreen(),
       },
     );
   }

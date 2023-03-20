@@ -139,6 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       context: context,
                                       label: value[1],
                                       color: Colors.green);
+                                  Navigator.of(context).pushReplacementNamed(
+                                      AppRoutes.assetScreen);
                                 } else {
                                   toast(
                                       context: context,
