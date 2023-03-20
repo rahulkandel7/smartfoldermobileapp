@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/api_constants.dart';
+import 'package:justsanppit/constants/app_routes.dart';
 import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
-import 'package:justsanppit/features/items/presentation/screens/widgets/add_item.dart';
 
 import '../../../assets/data/models/asset.dart';
 import '../controllers/item_controller.dart';
+import 'widgets/add_item.dart';
 
 class ItemScreen extends ConsumerWidget {
   const ItemScreen({super.key});
@@ -18,6 +19,8 @@ class ItemScreen extends ConsumerWidget {
       required WidgetRef ref,
       required BuildContext context}) {
     return InkWell(
+      onTap: () => Navigator.of(context)
+          .pushNamed(AppRoutes.imageView, arguments: photopath),
       onLongPress: () {
         showDialog(
           context: context,
@@ -26,15 +29,15 @@ class ItemScreen extends ConsumerWidget {
               child: ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(assetControllerProvider.notifier)
-                      .deleteAsset(id)
+                      .read(itemControllerProvider(id).notifier)
+                      .deleteItem(id)
                       .then((value) {
                     if (value[0] == 'true') {
                       toast(
                           context: context,
                           label: value[1],
                           color: Colors.green);
-                      ref.invalidate(assetControllerProvider);
+                      ref.invalidate(itemControllerProvider);
                     } else {
                       toast(
                           context: context, label: value[1], color: Colors.red);
@@ -59,17 +62,11 @@ class ItemScreen extends ConsumerWidget {
           color: Colors.grey.shade600,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Image.network(
-              '${ApiConstants.imageUrl}$photopath',
-              height: size.height * 0.14,
-              width: double.infinity,
-              fit: BoxFit.contain,
-            ),
-          ],
+        child: Image.network(
+          '${ApiConstants.imageUrl}$photopath',
+          height: size.height * 0.14,
+          width: double.infinity,
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -95,6 +92,10 @@ class ItemScreen extends ConsumerWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
+      floatingActionButton: AddItem(
+        size: size,
+        id: id,
+      ),
       body: ref.watch(itemControllerProvider(id)).when(
             data: (items) {
               return SingleChildScrollView(
@@ -104,20 +105,43 @@ class ItemScreen extends ConsumerWidget {
                       vertical: size.height * 0.01,
                       horizontal: size.width * 0.03,
                     ),
-                    child: Wrap(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        for (int i = 0; i < items.length; i++)
-                          listItems(
-                            size: size,
-                            photopath: items[i].photopath,
-                            context: context,
-                            ref: ref,
-                            id: items[i].id,
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                backgroundColor: Colors.grey.shade300,
+                                foregroundColor: Colors.grey.shade900,
+                                textStyle: TextStyle(
+                                  fontSize: size.width * 0.06,
+                                ),
+                                fixedSize:
+                                    Size(size.width * 0.7, size.height * 0.03),
+                              ),
+                              onPressed: () {},
+                              child: const Text(
+                                'Add Notes',
+                              ),
+                            ),
                           ),
-                        //* Add Item Button
-                        AddItem(
-                          size: size,
-                          id: id,
+                        ),
+                        Wrap(
+                          children: [
+                            for (int i = 0; i < items.length; i++)
+                              listItems(
+                                size: size,
+                                photopath: items[i].photopath,
+                                context: context,
+                                ref: ref,
+                                id: items[i].id,
+                              ),
+                          ],
                         ),
                       ],
                     ),

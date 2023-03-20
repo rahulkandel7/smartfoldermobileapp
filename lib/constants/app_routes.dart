@@ -33,4 +33,9 @@ class AppRoutes {
   /// Item Screen Route
   ///
   static const itemScreen = '/item';
+
+  ///
+  ///Image View Route
+  ///
+  static const imageView = '/image-view';
 }

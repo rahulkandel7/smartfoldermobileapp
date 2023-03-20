@@ -7,6 +7,7 @@ import 'package:justsanppit/features/auth/presentation/screens/forget_otp.dart';
 import 'package:justsanppit/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:justsanppit/features/auth/presentation/screens/login_screen.dart';
 import 'package:justsanppit/features/auth/presentation/screens/register_screen.dart';
+import 'package:justsanppit/features/items/presentation/screens/image_view.dart';
 import 'package:justsanppit/features/items/presentation/screens/item_screen.dart';
 
 void main() {
@@ -87,6 +88,7 @@ class MainApp extends StatelessWidget {
         AppRoutes.otp: (ctx) => const ForgetOtp(),
         AppRoutes.assetScreen: (ctx) => const AssetScreen(),
         AppRoutes.itemScreen: (ctx) => const ItemScreen(),
+        AppRoutes.imageView: (ctx) => const ImageView(),
       },
     );
   }

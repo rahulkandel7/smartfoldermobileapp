@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:justsanppit/core/utils/toast.dart';
-import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
+import 'package:justsanppit/features/items/presentation/controllers/item_controller.dart';
 
 class AddItem extends StatefulWidget {
   final Size size;
@@ -83,38 +82,12 @@ class _AddItemState extends State<AddItem> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => showItemAddDialog(context),
-      child: Container(
-        width: widget.size.width * 0.43,
-        height: widget.size.height * 0.2,
-        margin: EdgeInsets.all(widget.size.width * 0.02),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade600,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(
-              Icons.add_a_photo_outlined,
-              size: widget.size.width * 0.23,
-              color: Colors.grey.shade400,
-            ),
-            Padding(
-              padding:
-                  EdgeInsets.symmetric(horizontal: widget.size.width * 0.02),
-              child: AutoSizeText(
-                maxLines: 1,
-                'Add Item',
-                style: TextStyle(
-                  fontSize: widget.size.width * 0.07,
-                  color: Colors.grey.shade300,
-                ),
-              ),
-            )
-          ],
+    return CircleAvatar(
+      radius: widget.size.width * 0.07,
+      child: IconButton(
+        onPressed: () => showItemAddDialog(context),
+        icon: const Icon(
+          Icons.add,
         ),
       ),
     );
@@ -126,7 +99,7 @@ class _AddItemState extends State<AddItem> {
         return Dialog(
           child: Container(
             width: widget.size.width * 0.7,
-            height: widget.size.height * 0.425,
+            height: widget.size.height * 0.3,
             padding: EdgeInsets.symmetric(
               horizontal: widget.size.width * 0.03,
               vertical: widget.size.height * 0.01,
@@ -204,8 +177,8 @@ class _AddItemState extends State<AddItem> {
                         });
 
                         ref
-                            .read(assetControllerProvider.notifier)
-                            .addAsset(formData)
+                            .read(itemControllerProvider(widget.id).notifier)
+                            .addItem(formData)
                             .then((value) {
                           if (value[0] == 'false') {
                             toast(
@@ -217,7 +190,8 @@ class _AddItemState extends State<AddItem> {
                                 context: context,
                                 label: value[1],
                                 color: Colors.green);
-                            ref.invalidate(assetControllerProvider);
+                            image = null;
+                            ref.invalidate(itemControllerProvider);
                             Navigator.of(context).pop();
                           }
                         });
