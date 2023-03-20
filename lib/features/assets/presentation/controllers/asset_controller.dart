@@ -37,6 +37,10 @@ class AssetController extends StateNotifier<AsyncValue<List<Asset>>> {
       return msg;
     });
   }
+
+  Asset findById(int id) {
+    return state.value!.firstWhere((element) => element.id == id);
+  }
 }
 
 final assetControllerProvider =

@@ -1,25 +1,23 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/api_constants.dart';
-import 'package:justsanppit/constants/app_routes.dart';
-import 'package:justsanppit/core/utils/add_item.dart';
 import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
+import 'package:justsanppit/features/items/presentation/screens/widgets/add_item.dart';
 
-class AssetScreen extends ConsumerWidget {
-  const AssetScreen({super.key});
+import '../../../assets/data/models/asset.dart';
+import '../controllers/item_controller.dart';
 
-  InkWell listAssets(
+class ItemScreen extends ConsumerWidget {
+  const ItemScreen({super.key});
+
+  InkWell listItems(
       {required Size size,
-      required String name,
       required String photopath,
       required int id,
       required WidgetRef ref,
       required BuildContext context}) {
     return InkWell(
-      onTap: () =>
-          Navigator.of(context).pushNamed(AppRoutes.itemScreen, arguments: id),
       onLongPress: () {
         showDialog(
           context: context,
@@ -71,17 +69,6 @@ class AssetScreen extends ConsumerWidget {
               width: double.infinity,
               fit: BoxFit.contain,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-              child: AutoSizeText(
-                maxLines: 1,
-                name,
-                style: TextStyle(
-                  fontSize: size.width * 0.07,
-                  color: Colors.grey.shade300,
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -91,9 +78,25 @@ class AssetScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
+    int id = ModalRoute.of(context)!.settings.arguments as int;
+    Asset asset = ref.read(assetControllerProvider.notifier).findById(id);
     return Scaffold(
-      body: ref.watch(assetControllerProvider).when(
-            data: (assets) {
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(
+          asset.name,
+          style: const TextStyle(color: Colors.white),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.adaptive.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: ref.watch(itemControllerProvider(id)).when(
+            data: (items) {
               return SingleChildScrollView(
                 child: SafeArea(
                   child: Padding(
@@ -101,35 +104,20 @@ class AssetScreen extends ConsumerWidget {
                       vertical: size.height * 0.01,
                       horizontal: size.width * 0.03,
                     ),
-                    child: Column(
+                    child: Wrap(
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: size.height * 0.02),
-                          child: Center(
-                            child: Text(
-                              'App Logo',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .displaySmall!
-                                  .copyWith(color: Colors.white),
-                            ),
+                        for (int i = 0; i < items.length; i++)
+                          listItems(
+                            size: size,
+                            photopath: items[i].photopath,
+                            context: context,
+                            ref: ref,
+                            id: items[i].id,
                           ),
-                        ),
-                        Wrap(
-                          children: [
-                            for (int i = 0; i < assets.length; i++)
-                              listAssets(
-                                size: size,
-                                name: assets[i].name,
-                                photopath: assets[i].photopath,
-                                context: context,
-                                ref: ref,
-                                id: assets[i].id,
-                              ),
-                            //* Add Item Button
-                            AddItem(size: size),
-                          ],
+                        //* Add Item Button
+                        AddItem(
+                          size: size,
+                          id: id,
                         ),
                       ],
                     ),

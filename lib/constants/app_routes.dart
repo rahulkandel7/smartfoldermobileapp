@@ -28,4 +28,9 @@ class AppRoutes {
   /// Asset Screen Route
   ///
   static const assetScreen = '/asset';
+
+  ///
+  /// Item Screen Route
+  ///
+  static const itemScreen = '/item';
 }

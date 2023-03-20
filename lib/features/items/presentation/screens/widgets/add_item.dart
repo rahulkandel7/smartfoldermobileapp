@@ -8,11 +8,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
 
-import 'form_field.dart';
-
 class AddItem extends StatefulWidget {
   final Size size;
-  const AddItem({required this.size, super.key});
+  final int id;
+  const AddItem({required this.size, required this.id, super.key});
 
   @override
   State<AddItem> createState() => _AddItemState();
@@ -20,7 +19,6 @@ class AddItem extends StatefulWidget {
 
 class _AddItemState extends State<AddItem> {
   File? image;
-  String name = '';
 
   Future pickImage(ImageSource imageSource) async {
     try {
@@ -147,27 +145,6 @@ class _AddItemState extends State<AddItem> {
             ),
             child: Column(
               children: [
-                // * Enter Name Field
-                formField(
-                  initialValue: name,
-                  label: 'Enter Name',
-                  iconData: Icons.text_fields_outlined,
-                  size: widget.size,
-                  handleSave: (value) {
-                    name = value!;
-                  },
-                  handleChange: (value) {
-                    name = value;
-                  },
-                  handleValidate: (value) {
-                    if (value!.isEmpty) {
-                      return 'Enter Item Name';
-                    } else {
-                      return null;
-                    }
-                  },
-                  textInputType: TextInputType.text,
-                ),
                 // * Show Image or choose image buttom
                 Container(
                   width: widget.size.width * 0.6,
@@ -221,7 +198,7 @@ class _AddItemState extends State<AddItem> {
                         FormData formData;
 
                         formData = FormData.fromMap({
-                          'name': name,
+                          'asset_id': widget.id,
                           'photopath': await MultipartFile.fromFile(
                               image!.absolute.path),
                         });
@@ -231,18 +208,15 @@ class _AddItemState extends State<AddItem> {
                             .addAsset(formData)
                             .then((value) {
                           if (value[0] == 'false') {
-                            name = '';
                             toast(
                                 context: context,
                                 label: value[1],
                                 color: Colors.red);
                           } else {
-                            name = '';
                             toast(
                                 context: context,
                                 label: value[1],
                                 color: Colors.green);
-                            image = null;
                             ref.invalidate(assetControllerProvider);
                             Navigator.of(context).pop();
                           }
