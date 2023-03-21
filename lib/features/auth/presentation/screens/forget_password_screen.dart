@@ -31,10 +31,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                child: Text(
-                  'Logo App',
-                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+                child: SizedBox(
+                  height: screenSize.height * 0.2,
+                  width: screenSize.width * 0.5,
+                  child: Image.asset('assets/logo/logo.png'),
                 ),
               ),
               const SizedBox(

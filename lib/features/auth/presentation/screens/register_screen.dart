@@ -58,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: SizedBox(
                     height: size.height * 0.2,
                     width: size.width * 0.5,
-                    child: const Placeholder(),
+                    child: Image.asset('assets/logo/logo.png'),
                   ),
                 ),
                 Padding(
@@ -206,17 +206,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
                           },
                         ),
-
-                        // * Forget Password Text Button
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: const Text('Forget Password ?'),
-                          ),
+                        SizedBox(
+                          height: size.height * 0.02,
                         ),
-
-                        // * Login Button
+                        // * Register Button
                         Consumer(
                           builder: (context, ref, child) {
                             return FilledButton.tonalIcon(
