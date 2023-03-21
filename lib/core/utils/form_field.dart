@@ -6,12 +6,13 @@ Padding formField({
   required IconData iconData,
   required Size size,
   bool isPassword = false,
-  required Function(String?)? handleSave,
+  Function(String?)? handleSave,
   FocusNode? focusNode,
   Function()? handleEditing,
   String? Function(String?)? handleValidate,
   required TextInputType textInputType,
   Function(String)? handleChange,
+  int maxLines = 1,
 }) {
   return Padding(
     padding: EdgeInsets.only(top: size.height * 0.03),
@@ -24,6 +25,7 @@ Padding formField({
           iconData,
         ),
       ),
+      maxLines: maxLines,
       style: const TextStyle(
         color: Colors.white,
       ),

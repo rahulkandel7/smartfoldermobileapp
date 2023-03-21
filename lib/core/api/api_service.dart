@@ -72,6 +72,25 @@ class ApiService {
       throw DioException.fromDioError(e);
     }
   }
+
+  updateDataWithAuthorize({required String endpoint, data}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Dio dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.url,
+        headers: {
+          'Authorization': 'Bearer ${prefs.getString('token')}',
+        },
+      ),
+    );
+
+    try {
+      final result = await dio.put(endpoint, data: data);
+      return result.data;
+    } on DioError catch (e) {
+      throw DioException.fromDioError(e);
+    }
+  }
 }
 
 final apiServiceProvider = Provider<ApiService>((ref) {
