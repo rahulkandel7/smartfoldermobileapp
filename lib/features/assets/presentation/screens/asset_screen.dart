@@ -54,7 +54,7 @@ class AssetScreen extends ConsumerWidget {
         );
       },
       child: Container(
-        width: size.width * 0.43,
+        width: size.width * 0.4,
         height: size.height * 0.2,
         margin: EdgeInsets.all(size.width * 0.02),
         decoration: BoxDecoration(
