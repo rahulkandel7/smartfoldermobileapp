@@ -38,8 +38,7 @@ class AuthDataSourcesImpl extends AuthDataSources {
 
   @override
   Future<String> register(data) async {
-    final result =
-        await _apiService.postData(endPoint: 'create-user/', data: data);
+    await _apiService.postData(endPoint: 'create-user/', data: data);
     return 'User register successfully';
   }
 

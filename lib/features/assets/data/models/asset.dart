@@ -13,7 +13,7 @@ class Asset {
     return Asset(
       id: map['id'] as int,
       name: map['name'] as String,
-      photopath: map['photopath'] as String,
+      photopath: map['photo'] ?? '',
     );
   }
 }

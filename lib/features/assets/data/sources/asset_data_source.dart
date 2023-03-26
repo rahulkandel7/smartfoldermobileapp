@@ -26,9 +26,8 @@ class AssetDataSourceImpl extends AssetDataSource {
 
   @override
   Future<String> addAsset(data) async {
-    final result =
-        await _apiService.postDataWithAuthorize(endPoint: 'assets', data: data);
-    return result['message'];
+    await _apiService.postDataWithAuthorize(endPoint: 'assets/', data: data);
+    return 'Asset added Sucessfully';
   }
 
   @override

@@ -53,7 +53,7 @@ class ApiService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final Dio dio = Dio(
       BaseOptions(baseUrl: ApiConstants.url, headers: {
-        'Authorization': 'Bearer ${prefs.getString('token')}',
+        'Authorization': 'token ${prefs.getString('token')}',
       }),
     );
 
@@ -71,7 +71,7 @@ class ApiService {
     final Dio dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.url,
-        headers: {'Authorization': 'Bearer ${prefs.getString('token')}'},
+        headers: {'Authorization': 'token ${prefs.getString('token')}'},
       ),
     );
 
@@ -88,7 +88,7 @@ class ApiService {
     final Dio dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.url,
-        headers: {'Authorization': 'Bearer ${prefs.getString('token')}'},
+        headers: {'Authorization': 'token ${prefs.getString('token')}'},
       ),
     );
 
@@ -106,7 +106,7 @@ class ApiService {
       BaseOptions(
         baseUrl: ApiConstants.url,
         headers: {
-          'Authorization': 'Bearer ${prefs.getString('token')}',
+          'Authorization': 'token ${prefs.getString('token')}',
         },
       ),
     );

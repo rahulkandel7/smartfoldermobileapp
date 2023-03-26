@@ -22,6 +22,8 @@ class _AddItemState extends State<AddItem> {
   File? image;
   String name = '';
 
+  bool isProcessing = false;
+
   Future pickImage(ImageSource imageSource) async {
     try {
       final image = await ImagePicker().pickImage(source: imageSource);
@@ -210,47 +212,55 @@ class _AddItemState extends State<AddItem> {
                       style: FilledButton.styleFrom(
                         foregroundColor: Colors.grey.shade900,
                       ),
-                      onPressed: () async {
-                        if (image!.path.isEmpty) {
-                          toast(
-                              context: context,
-                              label: 'Please Choose Image',
-                              color: Colors.red);
-                          return;
-                        }
-                        FormData formData;
+                      onPressed: isProcessing
+                          ? null
+                          : () async {
+                              setState(() {
+                                isProcessing = true;
+                              });
+                              if (image!.path.isEmpty) {
+                                toast(
+                                    context: context,
+                                    label: 'Please Choose Image',
+                                    color: Colors.red);
+                                return;
+                              }
+                              FormData formData;
 
-                        formData = FormData.fromMap({
-                          'name': name,
-                          'photopath': await MultipartFile.fromFile(
-                              image!.absolute.path),
-                        });
+                              formData = FormData.fromMap({
+                                'name': name,
+                                'photo': await MultipartFile.fromFile(
+                                    image!.absolute.path),
+                              });
 
-                        ref
-                            .read(assetControllerProvider.notifier)
-                            .addAsset(formData)
-                            .then((value) {
-                          if (value[0] == 'false') {
-                            name = '';
-                            toast(
-                                context: context,
-                                label: value[1],
-                                color: Colors.red);
-                          } else {
-                            name = '';
-                            toast(
-                                context: context,
-                                label: value[1],
-                                color: Colors.green);
-                            image = null;
-                            ref.invalidate(assetControllerProvider);
-                            Navigator.of(context).pop();
-                          }
-                        });
-                      },
+                              ref
+                                  .read(assetControllerProvider.notifier)
+                                  .addAsset(formData)
+                                  .then((value) {
+                                if (value[0] == 'false') {
+                                  name = '';
+                                  toast(
+                                      context: context,
+                                      label: value[1],
+                                      color: Colors.red);
+                                } else {
+                                  name = '';
+                                  toast(
+                                      context: context,
+                                      label: value[1],
+                                      color: Colors.green);
+                                  image = null;
+                                  ref.invalidate(assetControllerProvider);
+                                  Navigator.of(context).pop();
+                                }
+                              });
+                              setState(() {
+                                isProcessing = false;
+                              });
+                            },
                       icon: const Icon(Icons.save_alt_outlined),
-                      label: const Text(
-                        'Save Item',
+                      label: Text(
+                        isProcessing ? 'Saving Item...' : 'Save Item',
                       ),
                     );
                   },
