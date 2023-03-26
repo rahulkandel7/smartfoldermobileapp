@@ -254,14 +254,15 @@ class _AddItemState extends State<AddItem> {
                                   Navigator.of(context).pop();
                                 }
                               });
-                              setState(() {
-                                isProcessing = false;
-                              });
                             },
                       icon: const Icon(Icons.save_alt_outlined),
-                      label: Text(
-                        isProcessing ? 'Saving Item...' : 'Save Item',
-                      ),
+                      label: isProcessing
+                          ? const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            )
+                          : const Text(
+                              'Save Item',
+                            ),
                     );
                   },
                 ),

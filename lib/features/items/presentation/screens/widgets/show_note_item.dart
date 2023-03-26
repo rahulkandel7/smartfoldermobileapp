@@ -186,6 +186,7 @@ class ShowNoteItemState extends ConsumerState<ShowNoteItem> {
                     } else {
                       toast(
                           context: context, label: value[1], color: Colors.red);
+                      ref.invalidate(noteControllerProvider);
                     }
                     Navigator.of(context).pop();
                   });

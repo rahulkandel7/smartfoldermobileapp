@@ -32,8 +32,7 @@ class AssetDataSourceImpl extends AssetDataSource {
 
   @override
   Future<String> deleteAsset(int id) async {
-    final result =
-        await _apiService.deleteDataWithAuthorize(endpoint: 'assets/$id');
-    return result['message'];
+    await _apiService.deleteDataWithAuthorize(endpoint: 'assets/$id/');
+    return 'asset deleted successfully';
   }
 }

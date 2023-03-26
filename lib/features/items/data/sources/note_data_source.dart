@@ -26,9 +26,8 @@ class NoteDataSourceImpl extends NoteDataSource {
 
   @override
   Future<String> deleteNote(int id) async {
-    final result =
-        await _apiService.deleteDataWithAuthorize(endpoint: 'notes/$id');
-    return result['message'];
+    await _apiService.deleteDataWithAuthorize(endpoint: 'notes/$id/');
+    return 'Note removed successfully';
   }
 
   @override
@@ -41,7 +40,7 @@ class NoteDataSourceImpl extends NoteDataSource {
   @override
   Future<String> updateNote(int id, data) async {
     final result = await _apiService.updateDataWithAuthorize(
-        endpoint: 'notes/$id', data: data);
+        endpoint: 'notes/$id/', data: data);
     return result['message'];
   }
 }

@@ -53,6 +53,7 @@ class ItemScreenState extends ConsumerState<ItemScreen> {
                     } else {
                       toast(
                           context: context, label: value[1], color: Colors.red);
+                      ref.invalidate(itemControllerProvider);
                     }
                     Navigator.of(context).pop();
                   });

@@ -41,6 +41,7 @@ class AssetScreen extends ConsumerWidget {
                     } else {
                       toast(
                           context: context, label: value[1], color: Colors.red);
+                      ref.invalidate(assetControllerProvider);
                     }
                     Navigator.of(context).pop();
                   });
