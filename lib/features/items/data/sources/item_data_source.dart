@@ -32,8 +32,7 @@ class ItemDataSourceImpl extends ItemDataSource {
 
   @override
   Future<String> deleteItem(int id) async {
-    final result =
-        await _apiService.deleteDataWithAuthorize(endpoint: 'items/$id/');
+    await _apiService.deleteDataWithAuthorize(endpoint: 'items/$id/');
     return 'Item deleted successfully';
   }
 }

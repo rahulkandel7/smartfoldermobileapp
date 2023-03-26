@@ -20,9 +20,8 @@ class NoteDataSourceImpl extends NoteDataSource {
 
   @override
   Future<String> addNote(data) async {
-    final result =
-        await _apiService.postDataWithAuthorize(endPoint: 'notes', data: data);
-    return result['message'];
+    await _apiService.postDataWithAuthorize(endPoint: 'notes/', data: data);
+    return 'Note added successfully';
   }
 
   @override
@@ -34,9 +33,8 @@ class NoteDataSourceImpl extends NoteDataSource {
 
   @override
   Future<List<Note>> fetchNote(int id) async {
-    final result =
-        await _apiService.getDatawithAuthorize(endpoint: 'items/$id/notes');
-    final notes = result['data'] as List<dynamic>;
+    final result = await _apiService.getDatawithAuthorize(endpoint: 'notes/');
+    final notes = result as List<dynamic>;
     return notes.map((note) => Note.fromMap(note)).toList();
   }
 

@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
 import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
 import 'package:justsanppit/features/items/data/models/item.dart';
+import 'package:justsanppit/features/items/data/models/note.dart';
 
 import '../../../../core/utils/form_field.dart';
 import '../../../assets/data/models/asset.dart';
@@ -74,8 +76,11 @@ class ItemScreenState extends ConsumerState<ItemScreen> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: Image.network(
-            photopath,
+          child: CachedNetworkImage(
+            imageUrl: photopath,
+            placeholder: (context, url) => Image.asset('assets/logo/logo.png'),
+            errorWidget: (context, url, error) =>
+                Image.asset('assets/logo/logo.png'),
             height: size.height * 0.14,
             width: double.infinity,
             fit: BoxFit.contain,
@@ -285,7 +290,11 @@ class ItemScreenState extends ConsumerState<ItemScreen> {
                           ),
                         ),
                         ref.watch(noteControllerProvider(asset.id)).when(
-                              data: (notes) {
+                              data: (noteData) {
+                                List<Note> notes = noteData
+                                    .where((note) =>
+                                        note.assetId == asset.id.toString())
+                                    .toList();
                                 return Column(
                                   children: notes
                                       .map(

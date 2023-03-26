@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/api_constants.dart';
@@ -65,8 +66,12 @@ class AssetScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Image.network(
-              '${ApiConstants.imageUrl}$photopath',
+            CachedNetworkImage(
+              imageUrl: '${ApiConstants.imageUrl}$photopath',
+              placeholder: (context, url) =>
+                  Image.asset('assets/logo/logo.png'),
+              errorWidget: (context, url, error) =>
+                  Image.asset('assets/logo/logo.png'),
               height: size.height * 0.14,
               width: double.infinity,
               fit: BoxFit.contain,
