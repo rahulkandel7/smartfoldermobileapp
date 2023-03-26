@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:justsanppit/constants/api_constants.dart';
 import 'package:justsanppit/constants/app_routes.dart';
 import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
+import 'package:justsanppit/features/items/data/models/item.dart';
 
 import '../../../../core/utils/form_field.dart';
 import '../../../assets/data/models/asset.dart';
@@ -72,11 +72,14 @@ class ItemScreenState extends ConsumerState<ItemScreen> {
           color: Colors.grey.shade600,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Image.network(
-          '${ApiConstants.imageUrl}$photopath',
-          height: size.height * 0.14,
-          width: double.infinity,
-          fit: BoxFit.contain,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.network(
+            photopath,
+            height: size.height * 0.14,
+            width: double.infinity,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
@@ -244,7 +247,9 @@ class ItemScreenState extends ConsumerState<ItemScreen> {
         id: id,
       ),
       body: ref.watch(itemControllerProvider(id)).when(
-            data: (items) {
+            data: (data) {
+              List<Item> items =
+                  data.where((item) => item.assetId == asset.id).toList();
               return SingleChildScrollView(
                 child: SafeArea(
                   child: Padding(

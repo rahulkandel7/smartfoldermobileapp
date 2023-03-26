@@ -19,23 +19,21 @@ class ItemDataSourceImpl extends ItemDataSource {
 
   @override
   Future<List<Item>> fetchItem(int id) async {
-    final result =
-        await _apiService.getDatawithAuthorize(endpoint: 'assets/$id/items');
-    final items = result['data'] as List<dynamic>;
+    final result = await _apiService.getDatawithAuthorize(endpoint: 'items/');
+    final items = result as List<dynamic>;
     return items.map((item) => Item.fromMap(item)).toList();
   }
 
   @override
   Future<String> addItem(data) async {
-    final result =
-        await _apiService.postDataWithAuthorize(endPoint: 'items', data: data);
-    return result['message'];
+    await _apiService.postDataWithAuthorize(endPoint: 'items/', data: data);
+    return 'Item added successfully';
   }
 
   @override
   Future<String> deleteItem(int id) async {
     final result =
-        await _apiService.deleteDataWithAuthorize(endpoint: 'items/$id');
-    return result['message'];
+        await _apiService.deleteDataWithAuthorize(endpoint: 'items/$id/');
+    return 'Item deleted successfully';
   }
 }

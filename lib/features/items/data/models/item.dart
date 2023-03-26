@@ -12,8 +12,8 @@ class Item {
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
       id: map['id'] as int,
-      assetId: map['asset_id'] as int,
-      photopath: map['photopath'] as String,
+      assetId: map['assest_id'] as int,
+      photopath: map['photo'] as String,
     );
   }
 }

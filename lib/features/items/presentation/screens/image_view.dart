@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../../constants/api_constants.dart';
-
 class ImageView extends StatelessWidget {
   const ImageView({super.key});
 
@@ -23,7 +21,7 @@ class ImageView extends StatelessWidget {
         child: Center(
           child: InteractiveViewer(
             child: Image.network(
-              '${ApiConstants.imageUrl}$photopath',
+              photopath,
               width: double.infinity,
             ),
           ),
