@@ -21,9 +21,14 @@ class DioException implements Exception {
   String _handleError(int statuscode, dynamic error) {
     switch (statuscode) {
       case 400:
-        return error["message"] ?? error["success"] ?? "Error";
+        final errorMsg = error as Map<String, dynamic>;
+        String msg = '';
+        errorMsg.forEach((key, value) {
+          msg = value.toString().replaceAll('[', '').replaceAll(']', '');
+        });
+        return msg;
       case 401:
-        return error["message"];
+        return error['detail'];
       case 404:
         return 'Page Not Found';
       case 409:

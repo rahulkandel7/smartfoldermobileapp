@@ -3,7 +3,7 @@ import 'package:justsanppit/core/api/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthDataSources {
-  Future<String> login(var data);
+  Future<String> login({required String username, required String password});
   Future<String> register(var data);
   Future<String> logout();
 
@@ -25,27 +25,27 @@ class AuthDataSourcesImpl extends AuthDataSources {
   final ApiService _apiService;
 
   AuthDataSourcesImpl(this._apiService);
+
   @override
-  Future<String> login(data) async {
-    final result = await _apiService.postData(endPoint: 'login', data: data);
+  Future<String> login(
+      {required String username, required String password}) async {
+    final result = await _apiService.loginOnly(
+        endPoint: 'auth/login/', username: username, password: password);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', result['token']);
-    return result['message'];
+    return 'Login Sucessfully';
   }
 
   @override
   Future<String> register(data) async {
-    final result = await _apiService.postData(endPoint: 'register', data: data);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', result['token']);
-    return result['message'];
+    final result =
+        await _apiService.postData(endPoint: 'create-user/', data: data);
+    return 'User register successfully';
   }
 
   @override
   Future<String> logout() async {
     final result = await _apiService.postDataWithAuthorize(endPoint: 'logout');
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('token');
     return result['message'];
   }
 

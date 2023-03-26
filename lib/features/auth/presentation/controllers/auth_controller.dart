@@ -5,8 +5,10 @@ class AuthController extends StateNotifier<AsyncValue<void>> {
   final AuthDataRepository _authDataRepository;
   AuthController(this._authDataRepository) : super(const AsyncLoading());
 
-  Future<List<String>> login(data) async {
-    final result = await _authDataRepository.login(data);
+  Future<List<String>> login(
+      {required String username, required String password}) async {
+    final result =
+        await _authDataRepository.login(password: password, username: username);
     return result.fold((error) {
       List<String> msg = ['false', error.message];
       return msg;

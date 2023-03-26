@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/api_constants.dart';
@@ -5,8 +7,33 @@ import 'package:justsanppit/core/api/dio_exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
+  // * For Login Only
+  loginOnly(
+      {required String endPoint,
+      var data,
+      String? username,
+      String? password}) async {
+    String basicAuth =
+        'Basic ${base64.encode(utf8.encode('$username:$password'))}';
+    final Dio dio = Dio(
+      BaseOptions(baseUrl: ApiConstants.url, headers: {
+        'Authorization': basicAuth,
+      }),
+    );
+
+    try {
+      final result = await dio.post(endPoint, data: data);
+      return result.data;
+    } on DioError catch (e) {
+      throw DioException.fromDioError(e);
+    }
+  }
+
   //* Post Data for Login,Register,Forget Password
-  postData({required String endPoint, required data}) async {
+  postData({
+    required String endPoint,
+    var data,
+  }) async {
     final Dio dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.url,

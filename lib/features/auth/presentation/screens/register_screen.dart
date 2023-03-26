@@ -224,12 +224,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 }
                                 registerKey.currentState!.save();
                                 Map<String, dynamic> data = {
-                                  'name': name,
+                                  'username': name,
                                   'email': email,
                                   'phone': phone,
                                   'address': address,
                                   'password': password,
-                                  'password_confirmation': confirmPassword,
                                 };
                                 ref
                                     .read(authControllerProvider.notifier)
@@ -240,8 +239,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         context: context,
                                         label: value[1],
                                         color: Colors.green);
-                                    Navigator.of(context).pushReplacementNamed(
-                                        AppRoutes.assetScreen);
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(AppRoutes.login);
                                   } else {
                                     toast(
                                         context: context,

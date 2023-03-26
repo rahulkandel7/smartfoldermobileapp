@@ -5,7 +5,8 @@ import 'package:justsanppit/core/api/dio_exception.dart';
 import 'package:justsanppit/features/auth/data/sources/auth_data_sources.dart';
 
 abstract class AuthDataRepository {
-  Future<Either<ApiError, String>> login(data);
+  Future<Either<ApiError, String>> login(
+      {required String username, required String password});
   Future<Either<ApiError, String>> register(data);
   Future<Either<ApiError, String>> logout();
 
@@ -23,9 +24,11 @@ class AuthDataRepositoryImpl extends AuthDataRepository {
 
   AuthDataRepositoryImpl(this._authDataSources);
   @override
-  Future<Either<ApiError, String>> login(data) async {
+  Future<Either<ApiError, String>> login(
+      {required String username, required String password}) async {
     try {
-      final result = await _authDataSources.login(data);
+      final result =
+          await _authDataSources.login(username: username, password: password);
       return right(result);
     } on DioException catch (e) {
       return left(ApiError(message: e.message!));

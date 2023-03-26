@@ -16,16 +16,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final loginKey = GlobalKey<FormState>();
 
-  late String email;
+  late String username;
   late String password;
 
-  FocusNode emailFocusNode = FocusNode();
+  FocusNode userNameFocusNode = FocusNode();
   FocusNode passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
-    emailFocusNode.dispose();
+    userNameFocusNode.dispose();
     passwordFocusNode.dispose();
   }
 
@@ -56,22 +56,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       //* Email Address Form Field
                       formField(
-                        focusNode: emailFocusNode,
-                        label: 'Enter Email Address',
-                        iconData: Icons.email_outlined,
+                        focusNode: userNameFocusNode,
+                        label: 'Enter User Name ',
+                        iconData: Icons.person_2_outlined,
                         size: size,
-                        textInputType: TextInputType.emailAddress,
+                        textInputType: TextInputType.text,
                         handleSave: (value) {
-                          email = value!;
+                          username = value!;
                         },
                         handleEditing: () => FocusScope.of(context)
                             .requestFocus(passwordFocusNode),
                         handleValidate: (value) {
                           if (value!.isEmpty) {
-                            return 'Please provide email address';
-                          } else if (!value.contains('@') ||
-                              !value.contains('.')) {
-                            return 'Provide valid email address';
+                            return 'Please provide username';
                           } else {
                             return null;
                           }
@@ -89,8 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         handleSave: (value) {
                           password = value!;
                         },
-                        handleEditing: () =>
-                            FocusScope.of(context).requestFocus(emailFocusNode),
+                        handleEditing: () => FocusScope.of(context)
+                            .requestFocus(userNameFocusNode),
                         handleValidate: (value) {
                           if (value!.isEmpty) {
                             return 'Please provide password';
@@ -103,13 +100,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
 
                       // * Forget Password Text Button
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(AppRoutes.forgetPasswordScreen),
-                          child: const Text('Forget Password ?'),
-                        ),
+                      // Align(
+                      //   alignment: Alignment.centerRight,
+                      //   child: TextButton(
+                      //     onPressed: () => Navigator.of(context)
+                      //         .pushNamed(AppRoutes.forgetPasswordScreen),
+                      //     child: const Text('Forget Password ?'),
+                      //   ),
+                      // ),
+                      SizedBox(
+                        height: size.height * 0.03,
                       ),
 
                       // * Login Button
@@ -126,13 +126,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 return;
                               }
                               loginKey.currentState!.save();
-                              Map<String, dynamic> data = {
-                                'email': email,
-                                'password': password,
-                              };
+
                               ref
                                   .read(authControllerProvider.notifier)
-                                  .login(data)
+                                  .login(username: username, password: password)
                                   .then((value) {
                                 if (value[0] == 'true') {
                                   toast(
