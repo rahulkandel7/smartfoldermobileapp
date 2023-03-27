@@ -80,6 +80,7 @@ class MainApp extends StatelessWidget {
         ),
       ),
       home: const LoginScreen(),
+      debugShowCheckedModeBanner: false,
       routes: {
         AppRoutes.login: (ctx) => const LoginScreen(),
         AppRoutes.register: (ctx) => const RegisterScreen(),
