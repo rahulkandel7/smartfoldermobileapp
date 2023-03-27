@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
 import 'package:justsanppit/features/assets/presentation/screens/asset_screen.dart';
@@ -11,7 +12,11 @@ import 'package:justsanppit/features/items/presentation/screens/image_view.dart'
 import 'package:justsanppit/features/items/presentation/screens/item_screen.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MainApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const ProviderScope(child: MainApp()));
+  });
 }
 
 class MainApp extends StatelessWidget {
