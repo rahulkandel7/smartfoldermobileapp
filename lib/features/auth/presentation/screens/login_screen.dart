@@ -165,8 +165,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                               label: value[1],
                                               color: Colors.green);
                                           setLoggingFalse();
-
-                                          Navigator.of(context)
+                                          Navigator.of(_loginScaffoldKey
+                                                  .currentContext!)
                                               .pushReplacementNamed(
                                                   AppRoutes.assetScreen);
                                         } else {

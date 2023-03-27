@@ -14,6 +14,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  // * Defining register scaffold key
+  final GlobalKey<ScaffoldState> _registerScaffoldKey =
+      GlobalKey<ScaffoldState>();
+
   final registerKey = GlobalKey<FormState>();
 
   late String email;
@@ -30,6 +34,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   FocusNode addressFocusNode = FocusNode();
   FocusNode phoneFocusNode = FocusNode();
 
+  // * Checking isregistering
+  bool isRegistering = false;
+
+  setIsRegisteringTrue() {
+    setState(() {
+      isRegistering = true;
+    });
+  }
+
+  setIsRegisteringFalse() {
+    setState(() {
+      isRegistering = false;
+    });
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -45,6 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _registerScaffoldKey,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -196,8 +216,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             phone = value!;
                           },
                           textInputType: TextInputType.phone,
-                          handleEditing: () => FocusScope.of(context)
-                              .requestFocus(nameFocusNode),
                           handleValidate: (value) {
                             if (value!.isEmpty) {
                               return 'Please provide phone number';
@@ -210,55 +228,71 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           height: size.height * 0.02,
                         ),
                         // * Register Button
-                        Consumer(
-                          builder: (context, ref, child) {
-                            return FilledButton.tonalIcon(
-                              style: FilledButton.styleFrom(
-                                fixedSize:
-                                    Size(size.width * 0.7, size.height * 0.06),
-                                foregroundColor: Colors.grey.shade900,
-                              ),
-                              onPressed: () {
-                                if (!registerKey.currentState!.validate()) {
-                                  return;
-                                }
-                                registerKey.currentState!.save();
-                                Map<String, dynamic> data = {
-                                  'username': name,
-                                  'email': email,
-                                  'phone': phone,
-                                  'address': address,
-                                  'password': password,
-                                };
-                                ref
-                                    .read(authControllerProvider.notifier)
-                                    .register(data)
-                                    .then((value) {
-                                  if (value[0] == 'true') {
-                                    toast(
-                                        context: context,
-                                        label: value[1],
-                                        color: Colors.green);
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(AppRoutes.login);
-                                  } else {
-                                    toast(
-                                        context: context,
-                                        label: value[1],
-                                        color: Colors.red);
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.logout_outlined),
-                              label: Text(
-                                'Register',
-                                style: TextStyle(
-                                  fontSize: size.width * 0.05,
+                        isRegistering
+                            ? const Center(
+                                child: CircularProgressIndicator.adaptive(
+                                  strokeWidth: 0.6,
                                 ),
+                              )
+                            : Consumer(
+                                builder: (context, ref, child) {
+                                  return FilledButton.tonalIcon(
+                                    style: FilledButton.styleFrom(
+                                      fixedSize: Size(
+                                          size.width * 0.7, size.height * 0.06),
+                                      foregroundColor: Colors.grey.shade900,
+                                    ),
+                                    onPressed: () {
+                                      if (!registerKey.currentState!
+                                          .validate()) {
+                                        return;
+                                      }
+                                      setIsRegisteringTrue();
+
+                                      registerKey.currentState!.save();
+                                      Map<String, dynamic> data = {
+                                        'username': name,
+                                        'email': email,
+                                        'phone': phone,
+                                        'address': address,
+                                        'password': password,
+                                      };
+                                      ref
+                                          .read(authControllerProvider.notifier)
+                                          .register(data)
+                                          .then((value) {
+                                        if (value[0] == 'true') {
+                                          toast(
+                                              context: _registerScaffoldKey
+                                                  .currentContext!,
+                                              label: value[1],
+                                              color: Colors.green);
+                                          setIsRegisteringFalse();
+
+                                          Navigator.of(_registerScaffoldKey
+                                                  .currentContext!)
+                                              .pushReplacementNamed(
+                                                  AppRoutes.login);
+                                        } else {
+                                          toast(
+                                              context: _registerScaffoldKey
+                                                  .currentContext!,
+                                              label: value[1],
+                                              color: Colors.red);
+                                          setIsRegisteringFalse();
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(Icons.logout_outlined),
+                                    label: Text(
+                                      'Register',
+                                      style: TextStyle(
+                                        fontSize: size.width * 0.05,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
 
                         //* Sign Up Button
                         Padding(
