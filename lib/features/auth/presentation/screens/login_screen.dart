@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ref
                                           .read(authControllerProvider.notifier)
                                           .login(
-                                              username: username,
+                                              username: username.trim(),
                                               password: password)
                                           .then((value) {
                                         if (value[0] == 'true') {
