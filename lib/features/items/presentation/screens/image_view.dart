@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageView extends StatelessWidget {
@@ -20,8 +21,10 @@ class ImageView extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: InteractiveViewer(
-            child: Image.network(
-              photopath,
+            child: CachedNetworkImage(
+              placeholder: (context, url) =>
+                  Image.asset('assets/logo/logo.png'),
+              imageUrl: photopath,
               width: double.infinity,
             ),
           ),
