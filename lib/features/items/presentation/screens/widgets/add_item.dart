@@ -10,7 +10,9 @@ import 'package:justsanppit/features/items/presentation/controllers/item_control
 class AddItem extends StatefulWidget {
   final Size size;
   final int id;
-  const AddItem({required this.size, required this.id, super.key});
+  final BuildContext ctx;
+  const AddItem(
+      {required this.size, required this.id, required this.ctx, super.key});
 
   @override
   State<AddItem> createState() => _AddItemState();
@@ -20,6 +22,21 @@ class _AddItemState extends State<AddItem> {
   File? image;
 
   bool isProcessing = false;
+
+  setIsProcessingTrue() {
+    setState(() {
+      isProcessing = true;
+    });
+    Navigator.of(context).pop();
+    showItemAddDialog(context);
+  }
+
+  setIsProcessingFalse() {
+    setState(() {
+      isProcessing = false;
+    });
+    Navigator.of(context).pop();
+  }
 
   Future pickImage(ImageSource imageSource) async {
     try {
@@ -156,18 +173,19 @@ class _AddItemState extends State<AddItem> {
                         ),
                 ),
                 // * Added Asset Button
-                Consumer(
-                  builder: (context, ref, child) {
-                    return FilledButton.tonalIcon(
-                      style: FilledButton.styleFrom(
-                        foregroundColor: Colors.grey.shade900,
-                      ),
-                      onPressed: isProcessing
-                          ? null
-                          : () async {
-                              setState(() {
-                                isProcessing = true;
-                              });
+                isProcessing
+                    ? const Center(
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 0.6,
+                        ),
+                      )
+                    : Consumer(
+                        builder: (context, ref, child) {
+                          return FilledButton.tonalIcon(
+                            style: FilledButton.styleFrom(
+                              foregroundColor: Colors.grey.shade900,
+                            ),
+                            onPressed: () async {
                               if (image!.path.isEmpty) {
                                 toast(
                                     context: context,
@@ -175,6 +193,8 @@ class _AddItemState extends State<AddItem> {
                                     color: Colors.red);
                                 return;
                               }
+                              setIsProcessingTrue();
+
                               FormData formData;
 
                               formData = FormData.fromMap({
@@ -190,30 +210,27 @@ class _AddItemState extends State<AddItem> {
                                   .then((value) {
                                 if (value[0] == 'false') {
                                   toast(
-                                      context: context,
+                                      context: widget.ctx,
                                       label: value[1],
                                       color: Colors.red);
                                 } else {
                                   toast(
-                                      context: context,
+                                      context: widget.ctx,
                                       label: value[1],
                                       color: Colors.green);
-                                  image = null;
-                                  ref.invalidate(itemControllerProvider);
-                                  Navigator.of(context).pop();
                                 }
-                                setState(() {
-                                  isProcessing = false;
-                                });
+                                image = null;
+
+                                setIsProcessingFalse();
                               });
                             },
-                      icon: const Icon(Icons.save_alt_outlined),
-                      label: Text(
-                        isProcessing ? 'Saving Item...' : 'Save Item',
+                            icon: const Icon(Icons.save_alt_outlined),
+                            label: const Text(
+                              'Save Item',
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ],
             ),
           ),

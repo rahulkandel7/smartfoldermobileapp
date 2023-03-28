@@ -9,7 +9,9 @@ import 'package:justsanppit/core/utils/toast.dart';
 import 'package:justsanppit/features/assets/presentation/controllers/asset_controller.dart';
 
 class AssetScreen extends ConsumerWidget {
-  const AssetScreen({super.key});
+  AssetScreen({super.key});
+
+  final GlobalKey<ScaffoldState> _assetScaffoldKey = GlobalKey<ScaffoldState>();
 
   InkWell listAssets(
       {required Size size,
@@ -98,6 +100,7 @@ class AssetScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _assetScaffoldKey,
       body: ref.watch(assetControllerProvider).when(
             data: (assets) {
               return SingleChildScrollView(
@@ -132,7 +135,10 @@ class AssetScreen extends ConsumerWidget {
                                 id: assets[i].id,
                               ),
                             //* Add Item Button
-                            AddItem(size: size),
+                            AddItem(
+                              size: size,
+                              ctx: _assetScaffoldKey.currentContext ?? context,
+                            ),
                           ],
                         ),
                       ],

@@ -23,6 +23,7 @@ class AssetController extends StateNotifier<AsyncValue<List<Asset>>> {
       return msg;
     }, (success) {
       List<String> msg = ['true', success];
+      fetchAsset();
       return msg;
     });
   }

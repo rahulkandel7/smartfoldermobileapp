@@ -11,7 +11,9 @@ import '../controllers/item_controller.dart';
 import 'widgets/add_item.dart';
 
 class ItemScreen extends ConsumerWidget {
-  const ItemScreen({super.key});
+  ItemScreen({super.key});
+
+  final GlobalKey<ScaffoldState> _itemScaffoldKey = GlobalKey<ScaffoldState>();
 
   InkWell listItems(
       {required Size size,
@@ -86,6 +88,7 @@ class ItemScreen extends ConsumerWidget {
     int id = ModalRoute.of(context)!.settings.arguments as int;
     Asset asset = ref.read(assetControllerProvider.notifier).findById(id);
     return Scaffold(
+      key: _itemScaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
@@ -103,6 +106,7 @@ class ItemScreen extends ConsumerWidget {
       floatingActionButton: AddItem(
         size: size,
         id: id,
+        ctx: _itemScaffoldKey.currentContext ?? context,
       ),
       body: ref.watch(itemControllerProvider(id)).when(
             data: (data) {

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:justsanppit/constants/app_routes.dart';
-import 'package:justsanppit/core/utils/toast.dart';
-import 'package:justsanppit/features/auth/presentation/controllers/auth_controller.dart';
 
 import '../../../../core/utils/form_field.dart';
+import '../../../../core/utils/toast.dart';
+import '../controllers/auth_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

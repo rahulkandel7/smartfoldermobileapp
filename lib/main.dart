@@ -92,8 +92,8 @@ class MainApp extends StatelessWidget {
         AppRoutes.forgetChangePassword: (ctx) => const ForgetChangePassword(),
         AppRoutes.forgetPasswordScreen: (ctx) => const ForgetPasswordScreen(),
         AppRoutes.otp: (ctx) => const ForgetOtp(),
-        AppRoutes.assetScreen: (ctx) => const AssetScreen(),
-        AppRoutes.itemScreen: (ctx) => const ItemScreen(),
+        AppRoutes.assetScreen: (ctx) => AssetScreen(),
+        AppRoutes.itemScreen: (ctx) => ItemScreen(),
         AppRoutes.imageView: (ctx) => const ImageView(),
       },
     );

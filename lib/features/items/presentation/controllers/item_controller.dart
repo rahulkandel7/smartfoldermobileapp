@@ -25,6 +25,7 @@ class ItemController extends StateNotifier<AsyncValue<List<Item>>> {
       return msg;
     }, (success) {
       List<String> msg = ['true', success];
+      fetchItems(id);
       return msg;
     });
   }

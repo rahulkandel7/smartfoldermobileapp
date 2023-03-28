@@ -11,8 +11,9 @@ import 'package:justsanppit/features/assets/presentation/controllers/asset_contr
 import 'form_field.dart';
 
 class AddItem extends StatefulWidget {
+  final BuildContext ctx;
   final Size size;
-  const AddItem({required this.size, super.key});
+  const AddItem({required this.size, required this.ctx, super.key});
 
   @override
   State<AddItem> createState() => _AddItemState();
@@ -23,6 +24,21 @@ class _AddItemState extends State<AddItem> {
   String name = '';
 
   bool isProcessing = false;
+
+  setIsProcessingTrue() {
+    setState(() {
+      isProcessing = true;
+    });
+    Navigator.of(context).pop();
+    showItemAddDialog(context);
+  }
+
+  setIsProcessingFalse() {
+    setState(() {
+      isProcessing = false;
+    });
+    Navigator.of(context).pop();
+  }
 
   Future pickImage(ImageSource imageSource) async {
     try {
@@ -206,25 +222,35 @@ class _AddItemState extends State<AddItem> {
                         ),
                 ),
                 // * Added Asset Button
-                Consumer(
-                  builder: (context, ref, child) {
-                    return FilledButton.tonalIcon(
-                      style: FilledButton.styleFrom(
-                        foregroundColor: Colors.grey.shade900,
-                      ),
-                      onPressed: isProcessing
-                          ? null
-                          : () async {
-                              setState(() {
-                                isProcessing = true;
-                              });
-                              if (image!.path.isEmpty) {
+                isProcessing
+                    ? const Center(
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 0.6,
+                        ),
+                      )
+                    : Consumer(
+                        builder: (context, ref, child) {
+                          return FilledButton.tonalIcon(
+                            style: FilledButton.styleFrom(
+                              foregroundColor: Colors.grey.shade900,
+                            ),
+                            onPressed: () async {
+                              if (name.isEmpty) {
+                                toast(
+                                    context: context,
+                                    label: 'Please enter name',
+                                    color: Colors.red);
+                                return;
+                              }
+                              if (image == null) {
                                 toast(
                                     context: context,
                                     label: 'Please Choose Image',
                                     color: Colors.red);
                                 return;
                               }
+                              setIsProcessingTrue();
+
                               FormData formData;
 
                               formData = FormData.fromMap({
@@ -238,34 +264,28 @@ class _AddItemState extends State<AddItem> {
                                   .addAsset(formData)
                                   .then((value) {
                                 if (value[0] == 'false') {
-                                  name = '';
                                   toast(
-                                      context: context,
+                                      context: widget.ctx,
                                       label: value[1],
                                       color: Colors.red);
                                 } else {
-                                  name = '';
                                   toast(
-                                      context: context,
+                                      context: widget.ctx,
                                       label: value[1],
                                       color: Colors.green);
-                                  image = null;
-                                  ref.invalidate(assetControllerProvider);
-                                  Navigator.of(context).pop();
                                 }
+                                name = '';
+                                image = null;
+                                setIsProcessingFalse();
                               });
                             },
-                      icon: const Icon(Icons.save_alt_outlined),
-                      label: isProcessing
-                          ? const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            )
-                          : const Text(
+                            icon: const Icon(Icons.save_alt_outlined),
+                            label: const Text(
                               'Save Item',
                             ),
-                    );
-                  },
-                ),
+                          );
+                        },
+                      ),
               ],
             ),
           ),
