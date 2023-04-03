@@ -41,6 +41,8 @@ class DioException implements Exception {
         }
       case 500:
         return "Internal server error";
+      case 503:
+        return "Internal server error";
       default:
         return "Something went wrong";
     }
